@@ -9,6 +9,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
+        <local:MenuRadial ItemsSource="{x:Bind ItemsMenu}"/>
     </Grid>
 </Page>
