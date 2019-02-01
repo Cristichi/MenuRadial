@@ -35,6 +35,8 @@ namespace MenuRadial
                 new MenuItem(){ Texto = "Entrada 2", Color = new SolidColorBrush(Colors.Red), Enlace = typeof(MainPage)},
                 new MenuItem(){ Texto = "Entrada 3", Color = new SolidColorBrush(Colors.White), Enlace = typeof(MainPage)},
                 new MenuItem(){ Texto = "Entrada 4", Color = new SolidColorBrush(Colors.Blue), Enlace = typeof(MainPage)},
+                new MenuItem(){ Texto = "Entrada 5", Color = new SolidColorBrush(Colors.Brown), Enlace = typeof(MainPage)},
+
             };
         }
     }
