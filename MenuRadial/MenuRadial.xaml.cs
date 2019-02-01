@@ -22,15 +22,32 @@ using Windows.UI.Xaml.Shapes;
 
 namespace MenuRadial
 {
-    public sealed partial class MenuRadial : UserControl
+    public sealed partial class MenuRadial : ContentControl
     {
         public MenuRadial()
         {
             this.InitializeComponent();
         }
 
-        private void OnSourceChanged()
+
+        private void GridSizeChanged(object sender, RoutedEventArgs e)
         {
+            Dibujar();
+        }
+
+        protected override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            Dibujar();
+            GridMR.SizeChanged += GridSizeChanged;
+        }
+
+        private void Dibujar() {
+            CanvasMR.Children.Clear();
+            if (ItemsSource is null || ItemsSource.Count() == 0){
+                return;
+            }
+
             int iteracion = 0;
             int numItems = ItemsSource.Count();
 
@@ -45,19 +62,48 @@ namespace MenuRadial
             double compensacion = Radio + margen;
 
             //punto central del componente
-            Point centro = new Point(Radio + margen, Radio + margen);
+            Point centro = new Point(Width/2, Height/2);
+            double sizeBola = 1;
 
+            Ellipse bolacentro = new Ellipse
+            {
+                Fill = new SolidColorBrush(Colors.Yellow),
+                Height = sizeBola,
+                Width = sizeBola,
+            };
+
+            Canvas.SetTop(bolacentro, centro.Y - sizeBola / 2);
+            Canvas.SetLeft(bolacentro, centro.X - sizeBola / 2);
+            CanvasMR.Children.Add(bolacentro);
+
+            Point anterior;
             foreach (MenuItem item in ItemsSource)
             {
-                Line linea = new Line
+                float angulo = 360 / numItems * iteracion;
+                PointCollection points = new PointCollection
                 {
-                    Fill = item.Color,
-                    X1 = centro.X,
-                    Y1 = centro.Y,
-                    X2 = centro.X,
-                    Y2 = centro.Y,
+                    new Point(0, 0),
+                    new Point(0, Radio)
                 };
+                Polyline linea = new Polyline
+                {
+                    Points = points,
+                    CenterPoint = new Vector3(0, 0, 0),
+                    Stroke = item.Color,
+                    StrokeThickness = 4,
+                };
+                linea.Rotation = angulo;
 
+                Canvas.SetTop(linea, centro.Y);
+                Canvas.SetLeft(linea, centro.X);
+                CanvasMR.Children.Add(linea);
+
+                if (anterior != null)
+                {
+                    
+                }
+
+                anterior = new Point(Math.Cos(angulo), Math.Sin(angulo));
                 /*
                 Polygon pizza = new Polygon
                 {
@@ -76,7 +122,6 @@ namespace MenuRadial
                 Canvas.SetTop(pizza, 0);
                 Canvas.SetLeft(pizza, 0);
                 */
-
                 iteracion++;
             }
         }
@@ -105,7 +150,6 @@ namespace MenuRadial
             set
             {
                 SetValue(ItemsSourceProperty, value);
-                OnSourceChanged();
             }
         }
 
