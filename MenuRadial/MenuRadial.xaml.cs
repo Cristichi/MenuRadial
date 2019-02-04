@@ -75,8 +75,7 @@ namespace MenuRadial
             Canvas.SetTop(bolacentro, centro.Y - sizeBola / 2);
             Canvas.SetLeft(bolacentro, centro.X - sizeBola / 2);
             CanvasMR.Children.Add(bolacentro);
-
-            Point anterior;
+            
             foreach (MenuItem item in ItemsSource)
             {
                 float angulo = 360 / numItems * iteracion;
@@ -98,12 +97,28 @@ namespace MenuRadial
                 Canvas.SetLeft(linea, centro.X);
                 CanvasMR.Children.Add(linea);
 
-                if (anterior != null)
+                //x = centro.X + radio*cos(angulo)
+                //y = centro.Y + radio*sin(angulo)
+                float anguloAnterior = gradosEnRadianes(angulo - 360 / numItems);
+                float anguloActual = gradosEnRadianes(angulo);
+                Point anterior = new Point(Radio * Math.Cos(anguloAnterior), Radio * Math.Sin(anguloAnterior));
+                Point este = new Point(Radio * Math.Cos(anguloActual), Radio * Math.Sin(anguloActual));
+                PointCollection points2 = new PointCollection
                 {
-                    
-                }
+                    anterior,
+                    este
+                };
+                Polyline linea2 = new Polyline
+                {
+                    Points = points2,
+                    Stroke = item.Color,
+                    StrokeThickness = 4,
+                };
 
-                anterior = new Point(Math.Cos(angulo), Math.Sin(angulo));
+                Canvas.SetTop(linea2, centro.Y);
+                Canvas.SetLeft(linea2, centro.X);
+                CanvasMR.Children.Add(linea2);
+
                 /*
                 Polygon pizza = new Polygon
                 {
@@ -124,6 +139,11 @@ namespace MenuRadial
                 */
                 iteracion++;
             }
+        }
+
+        public float gradosEnRadianes(double angulo)
+        {
+            return (float) (Math.PI / 180 * angulo);
         }
 
         public double Radio
