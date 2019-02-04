@@ -42,101 +42,48 @@ namespace MenuRadial
             GridMR.SizeChanged += GridSizeChanged;
         }
 
+        public void ElementoPinchado(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void Dibujar() {
             CanvasMR.Children.Clear();
             if (ItemsSource is null || ItemsSource.Count() == 0){
                 return;
             }
 
-            int iteracion = 0;
             int numItems = ItemsSource.Count();
-
-            //Perímero de la esfera
-            double perimetro = 2 * Math.PI * Radio;
-            //Perímetro que corresponde a cada item del menú
-            double perimItem = perimetro / numItems;
-
-            //Margen con los bordes izquierdo y superior
-            double margen = 70;
-            //Compensación requerida para que la esfera no se pierda a la izquierda
-            double compensacion = Radio + margen;
-
-            //punto central del componente
             Point centro = new Point(Width/2, Height/2);
-            double sizeBola = 1;
-
-            Ellipse bolacentro = new Ellipse
-            {
-                Fill = new SolidColorBrush(Colors.Yellow),
-                Height = sizeBola,
-                Width = sizeBola,
-            };
-
-            Canvas.SetTop(bolacentro, centro.Y - sizeBola / 2);
-            Canvas.SetLeft(bolacentro, centro.X - sizeBola / 2);
-            CanvasMR.Children.Add(bolacentro);
-            
+            int iteracion = 0;
             foreach (MenuItem item in ItemsSource)
             {
                 float angulo = 360 / numItems * iteracion;
-                PointCollection points = new PointCollection
-                {
-                    new Point(0, 0),
-                    new Point(0, Radio)
-                };
-                Polyline linea = new Polyline
-                {
-                    Points = points,
-                    CenterPoint = new Vector3(0, 0, 0),
-                    Stroke = item.Color,
-                    StrokeThickness = 4,
-                };
-                linea.Rotation = angulo;
-
-                Canvas.SetTop(linea, centro.Y);
-                Canvas.SetLeft(linea, centro.X);
-                CanvasMR.Children.Add(linea);
-
+                
                 //x = centro.X + radio*cos(angulo)
                 //y = centro.Y + radio*sin(angulo)
                 float anguloAnterior = GradosEnRadianes(angulo - 360 / numItems);
                 float anguloActual = GradosEnRadianes(angulo);
-                Point anterior = new Point(Radio * Math.Cos(anguloAnterior), Radio * Math.Sin(anguloAnterior));
-                Point este = new Point(Radio * Math.Cos(anguloActual), Radio * Math.Sin(anguloActual));
+                Point anterior = new Point(centro.X + Radio * Math.Cos(anguloAnterior), centro.Y + Radio * Math.Sin(anguloAnterior));
+                Point este = new Point(centro.X + Radio * Math.Cos(anguloActual), centro.Y + Radio * Math.Sin(anguloActual));
                 PointCollection points2 = new PointCollection
                 {
+                    centro,
                     anterior,
                     este
                 };
-                Polyline linea2 = new Polyline
+                Polygon poligono = new Polygon
                 {
                     Points = points2,
-                    Stroke = item.Color,
-                    StrokeThickness = 4,
+                    Fill = item.Color,
                 };
 
-                Canvas.SetTop(linea2, centro.Y);
-                Canvas.SetLeft(linea2, centro.X);
-                CanvasMR.Children.Add(linea2);
+                Canvas.SetTop(poligono, 0);
+                Canvas.SetLeft(poligono, 0);
+                CanvasMR.Children.Add(poligono);
 
-                /*
-                Polygon pizza = new Polygon
-                {
-                    Fill = item.Color
-                };
-                PointCollection puntos = new PointCollection
-                {
-                    new Point(margen+Radio+Radio/numItems, margen),
-                    new Point(margen-Radio-Radio/numItems, margen),
-                    centro,
-                };
-                pizza.Points = puntos;
-                pizza.CenterPoint = new System.Numerics.Vector3((float)centro.X, (float)centro.Y, 0);
-                pizza.Rotation = 360 / numItems * iteracion;
-                CanvasMR.Children.Add(pizza);
-                Canvas.SetTop(pizza, 0);
-                Canvas.SetLeft(pizza, 0);
-                */
+                poligono.PointerPressed += ElementoPinchado;
+
                 iteracion++;
             }
         }
