@@ -99,8 +99,8 @@ namespace MenuRadial
 
                 //x = centro.X + radio*cos(angulo)
                 //y = centro.Y + radio*sin(angulo)
-                float anguloAnterior = gradosEnRadianes(angulo - 360 / numItems);
-                float anguloActual = gradosEnRadianes(angulo);
+                float anguloAnterior = GradosEnRadianes(angulo - 360 / numItems);
+                float anguloActual = GradosEnRadianes(angulo);
                 Point anterior = new Point(Radio * Math.Cos(anguloAnterior), Radio * Math.Sin(anguloAnterior));
                 Point este = new Point(Radio * Math.Cos(anguloActual), Radio * Math.Sin(anguloActual));
                 PointCollection points2 = new PointCollection
@@ -141,7 +141,7 @@ namespace MenuRadial
             }
         }
 
-        public float gradosEnRadianes(double angulo)
+        public float GradosEnRadianes(double angulo)
         {
             return (float) (Math.PI / 180 * angulo);
         }
