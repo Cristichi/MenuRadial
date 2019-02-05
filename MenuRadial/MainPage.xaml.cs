@@ -31,7 +31,7 @@ namespace MenuRadial
             this.InitializeComponent();
             ItemsMenu = new ObservableCollection<MenuItem>()
             {
-                new MenuItem(){ Texto = "Entrada 1", Color = new SolidColorBrush(Colors.Yellow), Enlace = typeof(MainPage)},
+                new MenuItem(){ Texto = "Entrada 1", Color = new SolidColorBrush(Colors.Yellow), Enlace = typeof(OtraPagina)},
                 new MenuItem(){ Texto = "Entrada 2", Color = new SolidColorBrush(Colors.Red), Enlace = typeof(MainPage)},
                 new MenuItem(){ Texto = "Entrada 3", Color = new SolidColorBrush(Colors.White), Enlace = typeof(MainPage)},
                 new MenuItem(){ Texto = "Entrada 4", Color = new SolidColorBrush(Colors.Blue), Enlace = typeof(MainPage)},

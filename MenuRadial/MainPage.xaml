@@ -9,6 +9,11 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <menuradial:MenuRadial ItemsSource="{x:Bind ItemsMenu}" Radio="300" Width="300" Height="500"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <menuradial:MenuRadial ItemsSource="{x:Bind ItemsMenu}" Radio="300" Width="300" Height="500" Frame="{x:Bind MiFrame}" AnguloInicial="100"/>
+        <Frame x:Name="MiFrame" Grid.Row="1"/>
     </Grid>
 </Page>
